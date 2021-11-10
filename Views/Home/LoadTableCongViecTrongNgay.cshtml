@@ -1,0 +1,50 @@
+﻿@model List<QuanLyCongViec.Models.CongViec>
+@using QuanLyCongViec.Models;
+@{
+    Layout = null;
+    int index = 1;
+
+    var nguoiDungs = new List<NguoiDung> {
+                new NguoiDung(1,"Trần Phước Dư"),
+                new NguoiDung(2,"Trần Nguyễn Đăng Khoa"),
+                new NguoiDung(3,"Nguyễn Minh Luân"),
+                new NguoiDung(4,"Văng Quang Trung"),
+                new NguoiDung(5,"Thanh Hoài"),
+                new NguoiDung(6,"Tuấn Kiệt")
+            };
+    NguoiDung FindNguoiDung(int id = 0)
+    {
+        return nguoiDungs.Where(x => x.Id == id).FirstOrDefault();
+    }
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th> Tên </th>
+            <th> Mô tả </th>
+            <th> Ngày bắt đầu </th>
+            <th> Ngày kết thúc </th>
+            <th> Người giao</th>
+            <th> Người thực hiện </th>
+            <th style="width:200px; min-width:100px;"> &nbsp; </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@index</td>
+                <td>@item.Ten</td>
+                <td>@item.MoTa</td>
+                <td>@item.NgayBatDau.ToShortDateString()</td>
+                <td>@item.NgayKetThuc.ToShortDateString()</td>
+                <td>@FindNguoiDung(item.NguoiDuocGiao).Name</td>
+                <td>@FindNguoiDung(item.NguoiThucHien).Name</td>
+                <td class="align-middle text-right">
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

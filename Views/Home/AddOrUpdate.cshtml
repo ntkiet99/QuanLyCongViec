@@ -1,0 +1,89 @@
+﻿@model QuanLyCongViec.Models.CongViec
+@{
+    Layout = null;
+}
+<div class="modal-content">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box" style="padding:10px 10px">
+                <h4 class="page-title">Thông tin</h4>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @using (@Html.BeginForm("AddOrUpdate", "Home", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        @Html.HiddenFor(model => model.CongViecId)
+                        @Html.HiddenFor(model => model.ChaId)
+                        if (!string.IsNullOrEmpty(ViewBag.TenCha))
+                        {
+                            <div class="form-group">
+                                Công việc cha: @ViewBag.TenCha
+                            </div>
+                        }
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Tên<span class="text-danger">*</span></label>
+                            @Html.EditorFor(model => model.Ten, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Mô tả<span class="text-danger">*</span></label>
+                            @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", rows = "3" })
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Người thực hiện<span class="text-danger">*</span></label>
+                                    @Html.DropDownListFor(model => model.NguoiThucHien, (SelectList)ViewBag.NguoiThucHien, new { @id = "NguoiThucHien", @class = "form-control " })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Người giao<span class="text-danger">*</span></label>
+                                    @Html.DropDownListFor(model => model.NguoiDuocGiao, (SelectList)ViewBag.NguoiDuocGiao, new { @id = "NguoiDuocGiao", @class = "form-control " })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label" style="display: flex; flex-direction: column">Ngày bắt đầu</label>
+                                    @Html.EditorFor(model => model.NgayBatDau, new { htmlAttributes = new { @id = "flatpickr01", @class = "form-control", style = "width: 100%" } })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label" style="display: flex; flex-direction: column">Ngày kết thúc</label>
+                                    @Html.EditorFor(model => model.NgayKetThuc, new { htmlAttributes = new { @id = "flatpickr01", @class = "form-control", style = "width: 100%" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group text-right mb-0">
+                            <button class="btn btn-primary" type="submit">Lưu</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">Đóng</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("document").ready(function () {
+        if ('@Model.CongViecId' != 0) {
+            $('#NguoiDuocGiao').val('@Model.NguoiDuocGiao');
+            $('#NguoiThucHien').val('@Model.NguoiThucHien');
+        }
+    });
+    flatpickr("#flatpickr01", {
+        dateFormat: "m/d/Y",
+    })
+</script>

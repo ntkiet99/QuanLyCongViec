@@ -1,0 +1,90 @@
+﻿@model List<QuanLyCongViec.Models.CongViec>
+@using QuanLyCongViec.Models;
+@{
+    Layout = null;
+    int index = 1;
+
+    var nguoiDungs = new List<NguoiDung> {
+                new NguoiDung(1,"Trần Phước Dư"),
+                new NguoiDung(2,"Trần Nguyễn Đăng Khoa"),
+                new NguoiDung(3,"Nguyễn Minh Luân"),
+                new NguoiDung(4,"Văng Quang Trung"),
+                new NguoiDung(5,"Thanh Hoài"),
+                new NguoiDung(6,"Tuấn Kiệt")
+            };
+    NguoiDung FindNguoiDung(int id = 0)
+    {
+        return nguoiDungs.Where(x => x.Id == id).FirstOrDefault();
+    }
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th> Tên </th>
+            <th> Mô tả </th>
+            <th> Ngày bắt đầu </th>
+            <th> Ngày kết thúc </th>
+            <th> Người giao</th>
+            <th> Người thực hiện </th>
+            <th style="width:200px; min-width:100px;"> &nbsp; </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@index</td>
+                <td>@item.Ten</td>
+                <td>@item.MoTa</td>
+                <td>@item.NgayBatDau.ToShortDateString()</td>
+                <td>@item.NgayKetThuc.ToShortDateString()</td>
+                <td>@FindNguoiDung(item.NguoiDuocGiao).Name</td>
+                <td>@FindNguoiDung(item.NguoiThucHien).Name</td>
+                <td class="align-middle text-right">
+                    @{
+                        var uEdit = Url.Action("AddOrUpdate", "Home") + "/" + item.CongViecId;
+                        var urlEdit = @"Popup('" + uEdit + "')";
+                        var uDelete = Url.Action("Delete", "Home") + "/" + item.CongViecId;
+                        var urluDelete = @"Delete('" + uDelete + "')";
+                        var uCha = "/Home/AddOrUpdate?chaId=" + item.CongViecId;
+                        var urluCha = @"Popup('" + uCha + "')";
+                        index++;
+                    }
+
+                    <a href="#" onclick="@urluCha" class="btn btn-sm btn-icon btn-secondary"><i class="fas fa-plus"></i><span class="sr-only">Sửa</span></a>
+                    <a href="#" onclick="@urlEdit" class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Sửa</span></a>
+                    <a href="#" onclick="@urluDelete" class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i> <span class="sr-only">Xóa</span></a>
+                </td>
+            </tr>
+            if (item.Cons != null)
+            {
+                var conIndex = 1;
+                foreach (var con in item.Cons)
+                {
+                    <tr>
+                        <td>_______</td>
+                        <td>@con.Ten</td>
+                        <td>@con.MoTa</td>
+                        <td>@con.NgayBatDau.ToShortDateString()</td>
+                        <td>@con.NgayKetThuc.ToShortDateString()</td>
+                        <td>@FindNguoiDung(con.NguoiDuocGiao).Name</td>
+                        <td>@FindNguoiDung(con.NguoiThucHien).Name</td>
+                        <td class="align-middle text-right">
+                            @{
+                                var uEditc = Url.Action("AddOrUpdate", "Home") + "/" + con.CongViecId;
+                                var urlEditc = @"Popup('" + uEditc + "')";
+                                var uDeletec = Url.Action("Delete", "Home") + "/" + con.CongViecId;
+                                var urluDeletec = @"Delete('" + uDeletec + "')";
+                                conIndex++;
+                            }
+
+                            <a href="#" onclick="@urlEditc" class="btn btn-sm btn-icon btn-secondary"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Sửa</span></a>
+                                <a href="#" onclick="@urluDeletec" class="btn btn-sm btn-icon btn-secondary"><i class="far fa-trash-alt"></i> <span class="sr-only">Xóa</span></a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
